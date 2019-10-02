@@ -1,0 +1,20 @@
+{
+  "name": "tanks-game",
+  "version": "1.0.0",
+  "description": "This is tank game, you can with your friends",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "keywords": [
+    "game",
+    "tank"
+  ],
+  "author": "dongnguyenvie@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}
