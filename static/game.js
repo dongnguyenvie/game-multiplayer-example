@@ -3,61 +3,87 @@ const client = io("http://localhost:3000", {
   //   path: '/'
 });
 
-const c = document.getElementById("canvas");
-const ctx = c.getContext("2d");
+// const c = document.getElementById("canvas");
+// const ctx = c.getContext("2d");
+$( document ).ready(function() {
+  class Canvas {
+    constructor() {
+      this.c = document.getElementById("canvas");
+      this.ctx = this.c.getContext("2d");
+    }
 
-const gameState = {
-  players: {}
-};
-client.emit("newPlayer");
+    setSizeAutomatically() {
+      this.c.width = window.innerWidth;
+      this.c.height = window.innerHeight;
+    }
 
-client.on("state", gameState => {
-  console.log(Object.keys(gameState.players).length);
-  //   cxt.fillRect(0, 0, 10000, 10000);
-  for (let player in gameState.players) {
-    drawPlayer(gameState.players[player]);
+    getWidth() {
+      return this.c.width;
+    }
+
+    getHeight() {
+      return this.c.height;
+    }
   }
+  const layout = new Canvas();
+  layout.setSizeAutomatically();
+
+  client.emit("newPlayer", {width: layout.getWidth(), height: layout.getHeight() });
+
+  client.on("state", gameState => {
+    console.log(Object.keys(gameState.players).length, layout.getWidth(), layout.getHeight());
+
+    layout.ctx.clearRect(0, 0, layout.getWidth(), layout.getHeight());
+  
+    for (let player in gameState.players) {
+      drawPlayer(gameState.players[player]);
+    }
+
+  });
+
+  const playerMovement = {
+    up: false,
+    down: false,
+    left: false,
+    right: false
+  };
+  const keyDownHandler = e => {
+    if (e.keyCode == 39) {
+      playerMovement.right = true;
+    } else if (e.keyCode == 37) {
+      playerMovement.left = true;
+    } else if (e.keyCode == 38) {
+      playerMovement.up = true;
+    } else if (e.keyCode == 40) {
+      playerMovement.down = true;
+    }
+  };
+  const keyUpHandler = e => {
+    if (e.keyCode == 39) {
+      playerMovement.right = false;
+    } else if (e.keyCode == 37) {
+      playerMovement.left = false;
+    } else if (e.keyCode == 38) {
+      playerMovement.up = false;
+    } else if (e.keyCode == 40) {
+      playerMovement.down = false;
+    }
+  };
+
+  setInterval(() => {
+    client.emit("playerMovement", playerMovement);
+  }, 1000 / 60);
+
+  document.addEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
+
+  function drawPlayer(player) {
+    layout.ctx.beginPath();
+    layout.ctx.arc(player.x, player.y,player.width , 0,2*Math.PI);
+    layout.ctx.fillStyle = player.color;
+    layout.ctx.fill();
+    layout.ctx.closePath();
+  }
+
 });
 
-const playerMovement = {
-  up: false,
-  down: false,
-  left: false,
-  right: false
-};
-const keyDownHandler = e => {
-  if (e.keyCode == 39) {
-    playerMovement.right = true;
-  } else if (e.keyCode == 37) {
-    playerMovement.left = true;
-  } else if (e.keyCode == 38) {
-    playerMovement.up = true;
-  } else if (e.keyCode == 40) {
-    playerMovement.down = true;
-  }
-};
-const keyUpHandler = e => {
-  if (e.keyCode == 39) {
-    playerMovement.right = false;
-  } else if (e.keyCode == 37) {
-    playerMovement.left = false;
-  } else if (e.keyCode == 38) {
-    playerMovement.up = false;
-  } else if (e.keyCode == 40) {
-    playerMovement.down = false;
-  }
-};
-
-setInterval(() => {
-  client.emit("playerMovement", playerMovement);
-}, 1000 / 60);
-
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-function drawPlayer(player) {
-  ctx.beginPath();
-  ctx.rect(player.x, player.y, player.width, player.height);
-  ctx.fillStyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
-}

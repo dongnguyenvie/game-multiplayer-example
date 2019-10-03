@@ -1,15 +1,21 @@
 const gameState = {
   players: {}
 };
+let layout = {
+  width: 0,
+  height: 0
+}
 const event = io => {
   io.on("connection", socket => {
     console.log("a user connected:", socket.id);
     socket.on("newPlayer", () => {
+      // layout = {}
       gameState.players[socket.id] = {
         x: createLocation(250),
         y: createLocation(250),
         width: 25,
-        height: 25
+        height: 25,
+        color: getColor()
       };
     });
 
@@ -48,4 +54,8 @@ module.exports = event;
 
 function createLocation(point) {
   return Math.ceil(Math.random() * point);
+}
+
+function getColor() {
+  return '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
 }
