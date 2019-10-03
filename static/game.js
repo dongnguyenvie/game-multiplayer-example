@@ -1,8 +1,8 @@
 console.warn("If you have problems please contact email: dongnguyenvie@gmail.com");
 const urlParams = new URLSearchParams(window.location.search);
 const PORT = urlParams.get('port');
-
-const client = io(`:${PORT}`, {
+const isDev = location.hostname === 'localhost' ? true : false
+const client = io(`:${isDev ? 3000 : 80}`, {
   //   path: '/'
 });
 
