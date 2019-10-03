@@ -2,7 +2,7 @@ console.warn("If you have problems please contact email: dongnguyenvie@gmail.com
 
 const isDev = location.hostname === 'localhost' ? true : false
 const constant = {
-  PORT = isDev ? ":3000" : "",
+  PORT: isDev ? ":3000" : "",
   FPS: 60
 }
 
