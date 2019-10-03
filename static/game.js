@@ -1,5 +1,8 @@
 console.warn("If you have problems please contact email: dongnguyenvie@gmail.com");
-const client = io(":3000", {
+const urlParams = new URLSearchParams(window.location.search);
+const PORT = urlParams.get('port');
+
+const client = io(`:${PORT}`, {
   //   path: '/'
 });
 

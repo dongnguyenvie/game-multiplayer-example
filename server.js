@@ -10,7 +10,7 @@ const io = require("socket.io")(http);
 require("./event.js")(io);
 
 app.get("/", function(req, res) {
-  res.sendFile(__dirname + "/template/index.html");
+  res.sendFile(__dirname + `/template/index.html?port=${PORT}`);
 });
 
 http.listen(PORT, () => {
