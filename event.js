@@ -26,7 +26,6 @@ const event = io => {
       const player = gameState.players[socket.id];
       // const canvasWidth = 480;
       // const canvasHeight = 320;
-      // console.log(layout)
       const canvasWidth = layout.width;
       const canvasHeight = layout.height;
 
