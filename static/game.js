@@ -1,5 +1,5 @@
 console.warn("If you have problems please contact email: dongnguyenvie@gmail.com");
-const client = io("http://localhost:3000", {
+const client = io(":3000", {
   //   path: '/'
 });
 
@@ -31,8 +31,6 @@ $( document ).ready(function() {
   client.emit("newPlayer", {width: layout.getWidth(), height: layout.getHeight() });
 
   client.on("state", gameState => {
-    console.log(Object.keys(gameState.players).length, layout.getWidth(), layout.getHeight());
-
     layout.ctx.clearRect(0, 0, layout.getWidth(), layout.getHeight());
   
     for (let player in gameState.players) {

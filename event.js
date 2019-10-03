@@ -8,8 +8,11 @@ let layout = {
 const event = io => {
   io.on("connection", socket => {
     console.log("a user connected:", socket.id);
-    socket.on("newPlayer", () => {
-      // layout = {}
+    socket.on("newPlayer", ({ width, height }) => {
+      layout = {
+        width,
+        height
+      }
       gameState.players[socket.id] = {
         x: createLocation(250),
         y: createLocation(250),
@@ -21,8 +24,11 @@ const event = io => {
 
     socket.on("playerMovement", playerMovement => {
       const player = gameState.players[socket.id];
-      const canvasWidth = 480;
-      const canvasHeight = 320;
+      // const canvasWidth = 480;
+      // const canvasHeight = 320;
+      // console.log(layout)
+      const canvasWidth = layout.width;
+      const canvasHeight = layout.height;
 
       if (playerMovement.left && player.x > 0) {
         player.x -= 4;
@@ -39,7 +45,7 @@ const event = io => {
       }
     });
 
-    socket.on("disconnect", function() {
+    socket.on("disconnect", function () {
       console.log("user disconnected", socket.id);
       delete gameState.players[socket.id];
     });
@@ -57,5 +63,5 @@ function createLocation(point) {
 }
 
 function getColor() {
-  return '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+  return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6)
 }
