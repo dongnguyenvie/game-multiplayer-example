@@ -79,12 +79,12 @@ $( document ).ready(function() {
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
 
-});
+  function drawPlayer(player) {
+    layout.ctx.beginPath();
+    layout.ctx.arc(player.x, player.y,player.width , 0,2*Math.PI);
+    layout.ctx.fillStyle = player.color;
+    layout.ctx.fill();
+    layout.ctx.closePath();
+  }
 
-function drawPlayer(player) {
-  layout.ctx.beginPath();
-  layout.ctx.arc(player.x, player.y,player.width , 0,2*Math.PI);
-  layout.ctx.fillStyle = player.color;
-  layout.ctx.fill();
-  layout.ctx.closePath();
-}
+});
